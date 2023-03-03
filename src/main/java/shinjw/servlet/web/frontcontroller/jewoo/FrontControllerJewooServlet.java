@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "frontControllerServletJewoo", urlPatterns = "/front-controller/jewoo/*")
+@WebServlet(name = "frontControllerJewooServlet", urlPatterns = "/front-controller/jewoo/*")
 public class FrontControllerJewooServlet extends HttpServlet {
 
     private final Map<String, JewooController> controllerMap = new HashMap<>();
@@ -33,7 +33,22 @@ public class FrontControllerJewooServlet extends HttpServlet {
             return;
         }
 
-        JewooView view = controller.process(request, response);
-        view.render(request, response);
+        Map<String, String> paramMap = createParamMap(request);
+        JewooModelView modelView = controller.process(paramMap);
+
+        String viewName = modelView.getViewName();
+        JewooView view = viewResolver(viewName);
+        view.render(modelView.getModel(), request, response);
+    }
+
+    private Map<String, String> createParamMap(HttpServletRequest request) {
+        Map<String, String> paramMap = new HashMap<>();
+        request.getParameterNames().asIterator()
+                .forEachRemaining(paramName -> paramMap.put(paramName, request.getParameter(paramName)));
+        return paramMap;
+    }
+
+    private JewooView viewResolver(String viewName) {
+        return new JewooView("/WEB-INF/views/" + viewName + ".jsp");
     }
 }
