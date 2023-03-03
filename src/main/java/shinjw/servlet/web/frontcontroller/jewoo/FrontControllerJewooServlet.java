@@ -32,6 +32,8 @@ public class FrontControllerJewooServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        controller.process(request, response);
+
+        JewooView view = controller.process(request, response);
+        view.render(request, response);
     }
 }
