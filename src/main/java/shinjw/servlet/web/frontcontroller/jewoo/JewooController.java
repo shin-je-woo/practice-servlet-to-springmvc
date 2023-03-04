@@ -5,5 +5,5 @@ import java.io.IOException;
 import java.util.Map;
 
 public interface JewooController {
-    JewooModelView process(Map<String, String> paramMap) throws ServletException, IOException;
+    String process(Map<String, String> paramMap, Map<String, Object> model) throws ServletException, IOException;
 }

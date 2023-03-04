@@ -34,11 +34,11 @@ public class FrontControllerJewooServlet extends HttpServlet {
         }
 
         Map<String, String> paramMap = createParamMap(request);
-        JewooModelView modelView = controller.process(paramMap);
-
-        String viewName = modelView.getViewName();
+        Map<String, Object> model = new HashMap<>();
+        String viewName = controller.process(paramMap, model);
         JewooView view = viewResolver(viewName);
-        view.render(modelView.getModel(), request, response);
+
+        view.render(model, request, response);
     }
 
     private Map<String, String> createParamMap(HttpServletRequest request) {
